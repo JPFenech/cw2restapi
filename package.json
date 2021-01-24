@@ -19,6 +19,9 @@
   "homepage": "https://github.com/JPFenech/cw2restapi#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "mustache": "^4.1.0"
+    "fetch": "^1.1.0",
+    "mongodb": "^3.6.3",
+    "mustache": "^4.1.0",
+    "nodemon": "^2.0.7"
   }
 }
