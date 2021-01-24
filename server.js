@@ -8,8 +8,8 @@ app.use(express.json())
 
 // connect to MongoDB
 const MongoClient = require('mongodb').MongoClient;let db;
-MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.xfu9d.mongodb.net/Testing?retryWrites=true&w=majority', (err, client) => {
-db = client.db('Testing')
+MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.xfu9d.mongodb.net/myapp?retryWrites=true&w=majority', (err, client) => {
+   db = client.db('myapp')
     })
 
 // get the collection name
