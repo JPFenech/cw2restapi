@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="app.js"></script>
+        <script src="lessons.js"></script>
         <link href="main.css" rel="stylesheet">
     </head>
 
@@ -101,7 +102,7 @@
             el: '#app',
             data: {
                 showProduct: true,
-                //sitename: 'LESSONS 4 ALL',
+                sitename: 'LESSONS 4 ALL',
                 cart: [], // array to store items in shopping cart,
                     order: {
                     firstName: "",
@@ -112,15 +113,15 @@
 
 
 
-                created: function() { // this function will be run automatically
-// when creating the Vue instance
-//fetch('https://jeancw2.herokuapp.com/collection/lessons').then(function (response) {
-response.json().then(function (json) {
-// save the returned JSON object to 'product'
-// note that we used 'store.product' instead of 'this.product'
-store.product = json;
-});
-})}
+//                 created: function() { // this function will be run automatically
+// // when creating the Vue instance
+// fetch('https://jeancw22.herokuapp.com/collection/lessons').then(function (response) {
+// response.json().then(function (json) {
+// // save the returned JSON object to 'product'
+// // note that we used 'store.product' instead of 'this.product'
+// store.product = json;
+// });
+// })}
            },
             
             methods:{

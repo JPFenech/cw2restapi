@@ -5,8 +5,6 @@ const fetch = require("node-fetch")
 const http = require('http')
 
 
-
-
 // parse the request parameters
 app.use(express.json())
 
@@ -55,24 +53,6 @@ app.get('/collection/:collectionName/:id', (req, res, next)  =>  {
             })
  })
 
-
- 
-//  //fetch('http://localhost:3210').then(
-//     fetch('https://jeancw2.herokuapp.com/collection/lessons').then(
-//     function (response) {
-//     response.json().then(
-//     function (json) {
-//     // save the returned JSON object to 'products'
-//     // note that we used 'store.products' instead of 'this.products'
-//     store.products = json;
-//     })
-// })
-
-
-
-
-
-
  // update an object by ID
         app.put('/collection/:collectionName/:id', (req, res, next) => {
                 req.collection.update(
@@ -94,7 +74,6 @@ app.get('/collection/:collectionName/:id', (req, res, next)  =>  {
                     {msg: 'success'} : {msg: 'error'})
             })
 })
-
 
 const port = process.env.PORT || 3000
 app.listen(port);
