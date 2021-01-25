@@ -7,12 +7,9 @@ const path = require('path')
 const publicPath = path.resolve(__dirname, "static")
 
 
-
 // parse the request parameters
 app.use(express.json())
 app.use(express.static(publicPath))
-
-
 
 
 // connect to MongoDB
@@ -88,3 +85,164 @@ console.log ('server running on port' & port);
 // app.listen(3210, function(){
 //     console.log("running port 3210");
 // });
+
+var webstore = new Vue({
+    el: '#app',
+    data: {
+        showProduct: true,
+        sitename: 'LESSONS 4 ALL',
+        cart: [], // array to store items in shopping cart,
+            order: {
+            firstName: "",
+            number: "",
+
+        },
+        products: products,
+
+
+
+        created: function() { // this function will be run automatically
+// when creating the Vue instance
+fetch('https://jeancw2.herokuapp.com/collection/lessons').then(function (response) {
+response.json().then(function (json) {
+// save the returned JSON object to 'product'
+// note that we used 'store.product' instead of 'this.product'
+store.product = json;
+});
+
+})
+}
+   },
+    
+    methods:{
+        addToCart: function (product) {
+            this.cart.push(product.id);
+        },
+
+        addToCheckOutCart(product){
+            this.addToCheckOutCart.push(product);
+        },
+        showCheckout: function(){
+            this.showProduct = this.showProduct ? false : true;
+        },
+        
+        onSubmit(){
+            alert('Your booking has been confirmed!')
+        },
+     
+         canAddToCart: function(product){
+            return product.availableInventory > this.cartCount(product.id);
+        },
+        //cartCount Method to count the number of items of a particular type in the cart
+        cartCount(id){
+            let count = 0;
+            for (let i = 0; i < this.cart.length; i++){
+                if(this.cart[i] === id){
+                    count++
+                }
+            }
+            return count;
+        },
+
+        //text validation for Name + Surname + Address + Tel
+        isLetter(e) {
+        let char = String.fromCharCode(e.keyCode); 
+        if(/^[A-Za-z ]$/.test(char)) return true; 
+        else e.preventDefault(); // If no match, this will not allow keypress
+        },
+
+    
+        
+        sortS: function () {
+        this.products.sort(this.sortSub);
+        },
+        reverse: function () {
+        this.products.reverse();
+        },
+
+        sortP: function () {
+        this.products.sort(this.sortPri);
+        },
+        reverse: function () {
+        this.products.reverse();
+        },
+
+        sortL: function () {
+        this.products.sort(this.sortLoc);
+        },
+        reverse: function () {
+        this.products.reverse();
+        },
+
+        sortI: function () {
+        this.products.sort(this.sortInv);
+        },
+        reverse: function () {
+        this.products.reverse();
+        },
+
+         sortSub: function (a,b) {
+         if(a.subject > b.subject)
+         return 1;
+         if (a.subject < b.subject)
+         return -1;
+         return 0;
+         },
+
+         sortPri: function (a,b) {
+         if(a.price > b.price)
+         return 1;
+         if (a.price < b.price)
+         return -1;
+         return 0;
+         },
+
+         sortLoc: function (a,b) {
+         if(a.location > b.location)
+         return 1;
+         if (a.location < b.location)
+         return -1;
+         return 0;
+         },
+
+         sortInv: function (a,b) {
+         if(a.availableInventory > b.availableInventory)
+         return 1;
+         if (a.availableInventory < b.availableInventory)
+         return -1;
+         return 0;
+         },
+
+                     
+    },
+
+       computed: {
+        cartItemCount: function(){
+            return this.cart.length;
+            },
+        
+                        //isDisabled: function(){
+          //  return !this.order;
+          //  },
+
+        //We are sorting products by price
+        //removeing sorting of items by price from default and added in method
+        
+        //sortedProducts(){
+        //    let productsArray = this.products.slice(0);
+
+        //    function compare (a, b){
+        //        if(a.price > b.price)
+        //       return 1;
+        //        if (a.price < b.price)
+        //        return -1;
+        //        return 0;
+        //    }
+        //    return productsArray.sort(compare);
+        //},
+
+    
+
+      
+    },
+});
