@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/JPFenech/cw2restapi/issues"
   },
-  "homepage": "https://github.com/JPFenech/cw2restapi#readme",
+  "homepage": "https://jeancw2.herokuapp.com/index.html",
   "dependencies": {
     "express": "^4.17.1",
     "fetch": "^1.1.0",
