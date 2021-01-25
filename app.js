@@ -95,6 +95,11 @@ app.get('/collection/:collectionName/:id', (req, res, next)  =>  {
             })
 })
 
-app.listen(3210, function(){
-    console.log("running port 3210");
-});
+
+const port = process.env.PORT || 3000
+app.listen(port);
+console.log ('server running on port' & port);
+
+// app.listen(3210, function(){
+//     console.log("running port 3210");
+// });
