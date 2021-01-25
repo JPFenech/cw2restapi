@@ -1,6 +1,8 @@
 // load Express.js
 const express = require('express')
 const app = express()
+const fetch = require("node-fetch")
+const http = require('http')
 
 // parse the request parameters
 app.use(express.json())
@@ -50,39 +52,45 @@ app.get('/collection/:collectionName/:id', (req, res, next)  =>  {
             })
  })
 
-//  fetch('http://localhost:3210').then(
-//     function (response) {
-//     response.json().then(
-//     function (json) {
-//     // save the returned JSON object to 'products'
-//     // note that we used 'store.products' instead of 'this.products'
-//     store.products = json;
-//     })})
+
+ 
+ //fetch('http://localhost:3210').then(
+    fetch('https://github.com/JPFenech/cw2restapi.git').then(
+    function (response) {
+    response.json().then(
+    function (json) {
+    // save the returned JSON object to 'products'
+    // note that we used 'store.products' instead of 'this.products'
+    store.products = json;
+    })
+})
 
 
 
 
-//  // update an object by ID
-//         app.put('/collection/:collectionName/:id', (req, res, next) => {
-//                 req.collection.update(
-//                     { _id: new ObjectID(req.params.id) },
-//                     { $set: req.body },
-//                     { safe: true, multi: false },(e, result) => {
-//                     if (e) return next(e)
-//                                 res.send((result.result.n === 1) ?
-//                                     {msg: 'success'} : { msg: 'error'})
-//                         })
-// })
 
-// // delete an object by ID
-//     app.delete('/collection/:collectionName/:id', (req, res, next) => {
-//             req.collection.deleteOne(
-//                 { _id: ObjectID(req.params.id) },(e, result) => {
-//             if (e) return next(e)
-//                 res.send((result.result.n === 1) ?
-//                     {msg: 'success'} : {msg: 'error'})
-//             })
-// })
+
+ // update an object by ID
+        app.put('/collection/:collectionName/:id', (req, res, next) => {
+                req.collection.update(
+                    { _id: new ObjectID(req.params.id) },
+                    { $set: req.body },
+                    { safe: true, multi: false },(e, result) => {
+                    if (e) return next(e)
+                                res.send((result.result.n === 1) ?
+                                    {msg: 'success'} : { msg: 'error'})
+                        })
+})
+
+// delete an object by ID
+    app.delete('/collection/:collectionName/:id', (req, res, next) => {
+            req.collection.deleteOne(
+                { _id: ObjectID(req.params.id) },(e, result) => {
+            if (e) return next(e)
+                res.send((result.result.n === 1) ?
+                    {msg: 'success'} : {msg: 'error'})
+            })
+})
 
 app.listen(3210, function(){
     console.log("running port 3210");
