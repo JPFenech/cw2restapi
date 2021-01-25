@@ -1,0 +1,21 @@
+#app {
+  display: flex;
+  height: auto;
+  width: auto;
+  column-gap: 300px;
+  }
+
+#app > div {
+  border: 25px solid rgb(14, 33, 199);
+  background-color: rgb(137, 174, 199);
+  flex: auto;
+  }
+
+  #container {
+    display: flex;
+    height: 1200px;
+    column-gap: 300px;
+    }
+ 
+  
+
