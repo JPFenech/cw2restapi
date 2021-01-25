@@ -112,7 +112,7 @@
 
                 created: function() { // this function will be run automatically
 // when creating the Vue instance
-fetch('http://localhost:3210/static/index.html').then(
+fetch('http://localhost:3210').then(
 function (response) {
 response.json().then(
 function (json) {
@@ -121,8 +121,7 @@ function (json) {
 store.product = json;
 });
 })}
-                
-            },
+           },
             
             methods:{
                 addToCart: function (product) {
