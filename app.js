@@ -3,10 +3,16 @@ const express = require('express')
 const app = express()
 const fetch = require("node-fetch")
 const http = require('http')
+const path = require('path')
+const publicPath = path.resolve(__dirname, "static")
+
 
 
 // parse the request parameters
 app.use(express.json())
+app.use(express.static(publicPath))
+
+
 
 
 // connect to MongoDB
@@ -23,7 +29,7 @@ MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.xfu9d.mon
     })
 
 // dispaly a message for root path to show that API is working
-    app.get('/', function (req, res) {res.send('Select a collection, e.g., /collection/lessons')
+    app.get('/static.index.html', function (req, res) {res.send('Select a collection, e.g., /collection/lessons')
     })
 
 // retrieve all the objects from an collection
