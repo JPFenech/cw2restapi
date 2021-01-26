@@ -125,7 +125,27 @@
                     });
 
                 })
-}
+
+                fetch('https://jeancw2.herokuapp.com/collection/orders'
+                        , {
+                            method: 'POST'
+                            , 
+                            headers: {
+                                'Content-Type': 'application/json'
+                                , 
+                            },
+                            body: JSON.stringify("newProduct"), 
+                                                })
+                        .then(response => response.json())
+                        .then(responseJSON => {
+                            console.log('Success:'
+                                , responseJSON);
+                        });
+
+
+
+                }
+
            },
             
             methods:{
