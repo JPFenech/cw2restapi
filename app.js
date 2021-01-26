@@ -13,8 +13,8 @@ app.use(express.static(publicPath))
 
 
 // connect to MongoDB
-const MongoClient = require('mongodb').MongoClient;let db;
-MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.xfu9d.mongodb.net/myapp?retryWrites=true&w=majority', (err, client) => {
+const MongoClient = require('mongodb').MongoClient;
+let db; MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.xfu9d.mongodb.net/myapp?retryWrites=true&w=majority', (err, client) => {
    db = client.db('myapp')
     })
 
@@ -26,7 +26,8 @@ MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.xfu9d.mon
     })
 
 // dispaly a message for root path to show that API is working
-    app.get('/static/index.html', function (req, res) {res.send('Select a collection, e.g., /collection/lessons')
+    app.get('/', function (req, res) {res.send('Select a collection, e.g., /collection/lessons')
+    //app.get('/static/index.html', function (req, res) {res.send('Select a collection, e.g., /collection/lessons')
     })
 
 // retrieve all the objects from an collection
@@ -77,6 +78,29 @@ app.get('/collection/:collectionName/:id', (req, res, next)  =>  {
                     {msg: 'success'} : {msg: 'error'})
             })
 })
+
+
+//MiddleWare
+app.use(function (req, res, next) {
+    next();
+  });
+  
+  app.use(function (req, res, next) {
+        var filePath = path.join(__dirname, "static/images", req.url);
+    fs.stat(filePath, function (err, fileInfo) {
+      if (err) {
+        next();
+        return;
+      }
+      if (fileInfo.isFile()) res.sendFile(filePath);
+      else next();
+    });
+  });
+  
+  app.use(function (req, res) {
+    res.status(404);
+    res.send("File not found, Please enter the correct file path or name!");
+  });
 
 const port = process.env.PORT || 3000
 app.listen(port);
