@@ -8,7 +8,6 @@ const path = require('path')
 
 // parse the request parameters
 app.use(express.json())
-app.use(express.static(publicPath))
 
 
 // connect to MongoDB
