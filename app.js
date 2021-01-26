@@ -97,7 +97,7 @@ app.use(function (req, res, next) {
   
   app.use(function (req, res) {
     res.status(404);
-    res.send("Page or file not found ! Error 404!");
+    res.send("Page or file not found ! Error 404! Check your URL!");
   });
 
 const port = process.env.PORT || 3000
