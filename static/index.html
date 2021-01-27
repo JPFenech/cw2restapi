@@ -105,16 +105,16 @@
                 showProduct: true,
                 sitename: 'LESSONS 4 ALL',
                 cart: [], // array to store items in shopping cart,
-                products: {},
-                    order: {
+                order: {
                     firstName: "",
                     number: "",
 
             },
-               
-               created: function() { // this function will be run automatically
+                products: [],
+
+                created: function() { // this function will be run automatically
                 // when creating the Vue instance
-                fetch('https://jeancw2.herokuapp.com/static/index.html').then(
+                fetch('https://jeancw2.herokuapp.com/collection/products').then(
                     function (response) {
                         response.json().then(
                                 function (json) {
@@ -145,6 +145,9 @@
 
 
                 }
+               
+               
+               
 
            },
             
