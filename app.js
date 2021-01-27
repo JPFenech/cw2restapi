@@ -1,13 +1,11 @@
 // load Express.js
-const express = require('express')
-const fetch = require('node-fetch')
-const app = express()
-const fs = require('fs')
-const http = require('http')
-const path = require('path')
 
-var publicPath = path.resolve(__dirname, 'static')
-var imagePath = path.resolve(__dirname, 'images')
+var fetch = require("node-fetch");
+var express = require("express");
+var app = express();
+var fs = require("fs");
+var http = require("http");
+var path = require("path");
 
 // parse the request parameters
 app.use(express.json())
@@ -19,13 +17,6 @@ let db; MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.x
    db = client.db('myapp')
     })
     
-
-    
-//index and images path
-app.use('static/index.html', express.static(publicPath));
-app.use('static/images', express.static(imagePath));
-
-
 // get the collection name
         app.param('collectionName', (req, res, next, collectionName) => {
             req.collection = db.collection(collectionName)
