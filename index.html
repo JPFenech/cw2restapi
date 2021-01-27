@@ -34,14 +34,15 @@
                    <br>
             </header>
             <main>
+                <div>  
                     <div v-if='showProduct'>
                     <!--Using the for loop we are looping through the return of the sortedProducts computed property-->
                     <!--This will give us a list sorted by Price-->
-                    
+                   
                     <div v-for="product in products">
                         <h2 v-text ="product.subject"> {{ product.subject }} </h2>
                              <figure>   <img v-bind:src="product.image">  </figure>
-                             <p v-html = Subject {{ product.Subject }}></p> 
+                             <p v-show = Subject {{ product.Subject }}></p> 
                         <p v-html ="product.description"></p>
                         <p v-html = "product.location" class=info></p>
                         <p> Price {{ product.price }} </p>
@@ -94,170 +95,171 @@
         </div>
     </div> 
             </main>
+            <script type="text/javascript">
+                var store = new Vue({
+                    el: '#app',
+                    data: {
+                        showProduct: true,
+                        sitename: 'LESSONS 4 ALL',
+                        cart: [], // array to store items in shopping cart,
+                        order: {
+                            firstName: "",
+                            number: "",
+        
+                    },
+                        products: [],
+        
+                        created: function() { // this function will be run automatically
+                        // when creating the Vue instance
+                        fetch('https://jeancw2.herokuapp.com/collection/products').then(
+                            function (response) {
+                                response.json().then(
+                                        function (json) {
+                        // save the returned JSON object to 'product'
+                        // note that we used 'myapp.product' instead of 'this.product'
+                        store.products = json;
+                        console.log(json)
+                            });
+        
+                        })
+        
+                        
+                        fetch('https://jeancw2.herokuapp.com/collection/orders'
+                                , {
+                                    method: 'POST'
+                                    , 
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                        , 
+                                    },
+                                    body: JSON.stringify("newProduct"), 
+                                    })
+                                .then(response => response.json())
+                                .then(responseJSON => {
+                                    console.log('Success:'
+                                        , responseJSON);
+                                });
+        
+        
+        
+                        }
+                       
+                       
+                       
+        
+                   },
+                    
+                    methods:{
+                        addToCart: function (product) {
+                            this.cart.push(product.id);
+                        },
+        
+                        addToCheckOutCart(product){
+                            this.addToCheckOutCart.push(product);
+                        },
+                        showCheckout: function(){
+                            this.showProduct = this.showProduct ? false : true;
+                        },
+                        
+                        onSubmit(){
+                            alert('Your booking has been confirmed!')
+                        },
+                     
+                         canAddToCart: function(product){
+                            return product.availableInventory > this.cartCount(product.id);
+                        },
+                        //cartCount Method to count the number of items of a particular type in the cart
+                        cartCount(id){
+                            let count = 0;
+                            for (let i = 0; i < this.cart.length; i++){
+                                if(this.cart[i] === id){
+                                    count++
+                                }
+                            }
+                            return count;
+                        },
+        
+                        //text validation for Name + Surname + Address + Tel
+                        isLetter(e) {
+                        let char = String.fromCharCode(e.keyCode); 
+                        if(/^[A-Za-z ]$/.test(char)) return true; 
+                        else e.preventDefault(); // If no match, this will not allow keypress
+                        },
+        
+                    
+                        
+                        sortS: function () {
+                        this.products.sort(this.sortSub);
+                        },
+                        reverse: function () {
+                        this.products.reverse();
+                        },
+        
+                        sortP: function () {
+                        this.products.sort(this.sortPri);
+                        },
+                        reverse: function () {
+                        this.products.reverse();
+                        },
+        
+                        sortL: function () {
+                        this.products.sort(this.sortLoc);
+                        },
+                        reverse: function () {
+                        this.products.reverse();
+                        },
+        
+                        sortI: function () {
+                        this.products.sort(this.sortInv);
+                        },
+                        reverse: function () {
+                        this.products.reverse();
+                        },
+        
+                         sortSub: function (a,b) {
+                         if(a.subject > b.subject)
+                         return 1;
+                         if (a.subject < b.subject)
+                         return -1;
+                         return 0;
+                         },
+        
+                         sortPri: function (a,b) {
+                         if(a.price > b.price)
+                         return 1;
+                         if (a.price < b.price)
+                         return -1;
+                         return 0;
+                         },
+        
+                         sortLoc: function (a,b) {
+                         if(a.location > b.location)
+                         return 1;
+                         if (a.location < b.location)
+                         return -1;
+                         return 0;
+                         },
+        
+                         sortInv: function (a,b) {
+                         if(a.availableInventory > b.availableInventory)
+                         return 1;
+                         if (a.availableInventory < b.availableInventory)
+                         return -1;
+                         return 0;
+                         },
+                
+                                     
+                    },
+        
+                       computed: {
+                        cartItemCount: function(){
+                            return this.cart.length;
+                            },
+         
+                    },
+                });
+            </script>
     </body>
 
-    <script>
-        var store = new Vue({
-            el: '#app',
-            data: {
-                showProduct: true,
-                sitename: 'LESSONS 4 ALL',
-                cart: [], // array to store items in shopping cart,
-                order: {
-                    firstName: "",
-                    number: "",
-
-            },
-                products: [],
-
-                created: function() { // this function will be run automatically
-                // when creating the Vue instance
-                fetch('https://jeancw2.herokuapp.com/collection/products').then(
-                    function (response) {
-                        response.json().then(
-                                function (json) {
-                // save the returned JSON object to 'product'
-                // note that we used 'myapp.product' instead of 'this.product'
-                store.products = json;
-                console.log(json)
-                    });
-
-                })
-
-                
-                fetch('https://jeancw2.herokuapp.com/collection/orders'
-                        , {
-                            method: 'POST'
-                            , 
-                            headers: {
-                                'Content-Type': 'application/json'
-                                , 
-                            },
-                            body: JSON.stringify("newProduct"), 
-                            })
-                        .then(response => response.json())
-                        .then(responseJSON => {
-                            console.log('Success:'
-                                , responseJSON);
-                        });
-
-
-
-                }
-               
-               
-               
-
-           },
-            
-            methods:{
-                addToCart: function (product) {
-                    this.cart.push(product.id);
-                },
-
-                addToCheckOutCart(product){
-                    this.addToCheckOutCart.push(product);
-                },
-                showCheckout: function(){
-                    this.showProduct = this.showProduct ? false : true;
-                },
-                
-                onSubmit(){
-                    alert('Your booking has been confirmed!')
-                },
-             
-                 canAddToCart: function(product){
-                    return product.availableInventory > this.cartCount(product.id);
-                },
-                //cartCount Method to count the number of items of a particular type in the cart
-                cartCount(id){
-                    let count = 0;
-                    for (let i = 0; i < this.cart.length; i++){
-                        if(this.cart[i] === id){
-                            count++
-                        }
-                    }
-                    return count;
-                },
-
-                //text validation for Name + Surname + Address + Tel
-                isLetter(e) {
-                let char = String.fromCharCode(e.keyCode); 
-                if(/^[A-Za-z ]$/.test(char)) return true; 
-                else e.preventDefault(); // If no match, this will not allow keypress
-                },
-
-            
-                
-                sortS: function () {
-    	        this.products.sort(this.sortSub);
-                },
-                reverse: function () {
-    	        this.products.reverse();
-                },
-
-                sortP: function () {
-    	        this.products.sort(this.sortPri);
-                },
-                reverse: function () {
-    	        this.products.reverse();
-                },
-
-                sortL: function () {
-    	        this.products.sort(this.sortLoc);
-                },
-                reverse: function () {
-    	        this.products.reverse();
-                },
-
-                sortI: function () {
-    	        this.products.sort(this.sortInv);
-                },
-                reverse: function () {
-    	        this.products.reverse();
-                },
-
-                 sortSub: function (a,b) {
-                 if(a.subject > b.subject)
-                 return 1;
-                 if (a.subject < b.subject)
-                 return -1;
-                 return 0;
-                 },
-
-                 sortPri: function (a,b) {
-                 if(a.price > b.price)
-                 return 1;
-                 if (a.price < b.price)
-                 return -1;
-                 return 0;
-                 },
-
-                 sortLoc: function (a,b) {
-                 if(a.location > b.location)
-                 return 1;
-                 if (a.location < b.location)
-                 return -1;
-                 return 0;
-                 },
-
-                 sortInv: function (a,b) {
-                 if(a.availableInventory > b.availableInventory)
-                 return 1;
-                 if (a.availableInventory < b.availableInventory)
-                 return -1;
-                 return 0;
-                 },
-        
-                             
-            },
-
-               computed: {
-                cartItemCount: function(){
-                    return this.cart.length;
-                    },
- 
-            },
-        });
-    </script>
+    
 </html>
