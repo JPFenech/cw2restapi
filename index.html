@@ -100,7 +100,7 @@
                 
                 created: function() { // this function will be run automatically
                 // when creating the Vue instance
-                fetch('https://jeancw2.herokuapp.com/collection/lessons').then(
+                fetch('https://jeancw2.herokuapp.com/collection/products').then(
                     function (response) {
                         response.json().then(
                                 function (json) {
@@ -112,18 +112,19 @@
 
                 })
                
-                fetch('https://jeancw2.herokuapp.com/collection/orders'   , {
-                            method: 'POST'       , 
-                            headers: {
-                                'Content-Type': 'application/json'
-                                , 
-                            },
-                            body: JSON.stringify("newProduct"), 
-                            })
-                        .then(response => response.json())
-                        .then(responseJSON => {
-                            console.log('Success:', responseJSON);
-                        });
+                // fetch('https://jeancw2.herokuapp.com/collection/orders'   , {
+                //             method: 'POST'       , 
+                //             headers: {
+                //                 'Content-Type': 'application/json'
+                //                 , 
+                //             },
+                //             body: JSON.stringify("newProduct"), 
+                //             })
+                //         .then(response => response.json())
+                //         .then(responseJSON => {
+                //             console.log('requesting data from server ...')
+                //             console.log('Success:', responseJSON);
+                //         });
 
                 }
 
