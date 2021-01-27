@@ -34,8 +34,7 @@
                                     <!--This will give us a list sorted by Price-->
                                 
                                     <div v-for="product in products">
-                                                <h2 v-text ="product.subject"> {{ product.subject }} </h2>
-                                                <figure>   <img v-bind:src="product.image">  </figure>
+                                              <figure>   <img v-bind:src="product.image">  </figure>
                                             <p v-show = Subject {{ product.Subject }}></p> 
                                                 <p v-html ="product.description"></p>
                                                 <p v-html = "product.location" class=info></p>
