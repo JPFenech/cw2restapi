@@ -18,6 +18,7 @@
   },
   "homepage": "https://jeancw2.herokuapp.com/index.html",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "fetch": "^1.1.0",
     "mongodb": "^3.6.3",

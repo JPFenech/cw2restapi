@@ -1,20 +1,27 @@
 // load Express.js
-var fetch = require("node-fetch");
-var express = require("express");
-var app = express();
-var fs = require("fs");
-var http = require("http");
-var path = require("path");
+const fetch = require("node-fetch");
+const express = require("express");
+const app = express();
+const fs = require("fs");
+const http = require("http");
+const path = require("path");
+const cors = require("cors");
+
+//used since no-cors did not work
+app.use(cors());
 
 // parse the request parameters
-app.use(express.json())
+app.use(express.json());
+
+// Cors for cross origin allowance
+
 
 
 // connect to MongoDB
 const MongoClient = require('mongodb').MongoClient;
 let db; MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.xfu9d.mongodb.net/myapp?retryWrites=true&w=majority', (err, client) => {
    db = client.db('myapp')
-    })
+    });
     
 
 // get the collection name
@@ -22,23 +29,23 @@ let db; MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.x
             req.collection = db.collection(collectionName)
 // console.log('collection name:', req.collection)
                 return next()
-    })
+    });
 
 // dispaly a message for root path to show that API is working
     app.get('/', function (req, res) {res.send('Select a collection, e.g., /collection/lessons')
-    })
+    });
 
 //main page
     app.get('/static/index.html', function (req, res) {res.send('main page')
-    })
+    });
 
 // retrieve all the objects from an collection
         app.get('/collection/:collectionName', (req, res) => {req.collection.find({}).toArray((e, results) => {
             if (e) return next(e)
                 res.send(results)
-    })
+    });
 
-})
+});
 
 //retrieve an object by Mogodb ID
 const ObjectID = require('mongodb').ObjectID;
@@ -49,7 +56,7 @@ app.get('/collection/:collectionName/:id', (req, res, next)  =>  {
             if (e) return next(e)
             res.send(result)
         })
-})
+});
 
  //add an object
         app.post('/collection/:collectionName', (req, res, next) =>  {
@@ -57,7 +64,7 @@ app.get('/collection/:collectionName/:id', (req, res, next)  =>  {
                         if (e) return(e)
                             res.send(results.ops)
             })
- })
+ });
 
  // update an object by ID
         app.put('/collection/:collectionName/:id', (req, res, next) => {
@@ -69,7 +76,7 @@ app.get('/collection/:collectionName/:id', (req, res, next)  =>  {
                                 res.send((result.result.n === 1) ?
                                     {msg: 'success'} : { msg: 'error'})
                         })
-})
+});
 
 // delete an object by ID
     app.delete('/collection/:collectionName/:id', (req, res, next) => {
@@ -79,7 +86,7 @@ app.get('/collection/:collectionName/:id', (req, res, next)  =>  {
                 res.send((result.result.n === 1) ?
                     {msg: 'success'} : {msg: 'error'})
             })
-})
+});
 
 
 //MiddleWare
@@ -88,7 +95,7 @@ app.use(function (req, res, next) {
   });
   
   app.use(function (req, res, next) {
-        var filePath = path.join(__dirname, "indexl.html", req.url);
+        var filePath = path.join(__dirname, "/images", req.url);
     fs.stat(filePath, function (err, fileInfo) {
       if (err) {
         next();
@@ -108,7 +115,3 @@ app.use(function (req, res, next) {
 const port = process.env.PORT || 3000
 app.listen(port);
 console.log ('server running on port' & port);
-
-// app.listen(3210, function(){
-//     console.log("running port 3210");
-// });

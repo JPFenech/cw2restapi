@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Knowledge is Power!</title>
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="main.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <header id="navbar">
+            <h1 id="sitetitle" v-text="sitename"></h1>
+            <button v-show="btnCart" id="btnCart" v-on:click='showCart'>
+                <!--Returns the Number of Items Inside the Cart.-->
+                {{cartItemCount}}
+                <span id="btnText" class="fas fa-cart-plus" v-on:click='switchText'> Cart</span>
+            </button>
+        </header>
+        <main>
+            <!--If this sections shows true then in will display the lessons section on the webpage-->
+            <div id="box" v-if='showLessonsPage'>
+                <div id="sort-section">
+                    <h1>Sorting By:</h1>
+                    <!--V-model - Sort will automatically pick up changes and update the data on screen-->
+                    <select v-model="sort" v-on:change="sortLessons">
+                        <!--Accroding to each value of the switch case it will execute that case/function and sort those subjects.-->
+                        <option :value="1">Subject: Ascending</option>
+                        <option :value="2">Subject: Descending</option>
+                        <option :value="3">Location: Ascending</option>
+                        <option :value="4">Location: Descending</option>
+                        <option :value="5">Price: Ascending</option>
+                        <option :value="6">Price: Descending</option>
+                        <option :value="7">Spaces Left: Ascending</option>
+                        <option :value="8">Spaces Left: Descending</option>
+                    </select>
+                </div>
+                <div id="main" v-for="(lesson, Space) in lessons">
+                <h1>Subject: {{lesson.SubjectName}}</h1>
+                <h2>Location:  {{lesson.Location}}</h2>
+                <h3>Price: Eur {{lesson.Price}}</h3>
+                 <span v-if='lesson.Space === cartCount(lesson)'>
+                <h4>Spaces Full</h4>
+                 </span>
+                   
+                    <span v-else-if="lesson.Space - cartCount(lesson) < 5">
+                        <h4>Available Spaces: {{lesson.Space - cartCount(lesson)}}</h4>
+                    </span>
+                    <span v-else>
+                        <h4>Available Spaces: {{lesson.Space}}</h4>
+                    </span>
+
+                    <figure>
+                        <img v-bind:src="lesson.Image" height="100" width="100">
+                    </figure>
+
+                    <button v-on:click='addToCart(lesson, Space)' v-if='canAddToCart(lesson)'>Add to cart</button>
+                    <button id="hide" hidden="hidden" v-else>Add to cart</button>
+                </div>
+            </div>
+           
+            <div id="cart-page" v-else>
+          
+                <div id="display-cart" v-for="cart in displayLessonsCart">
+                     <h1>{{ cart.SubjectName }}</h1>
+                     <p>Location: {{ cart.Location }}</p>
+                     <h3>Price: Eur{{ cart.Price }}</h3>
+                     <h4>Spaces: {{ cart.Space }}</h4>
+                     <img v-bind:src="cart.Image" height="60px" width="60px"><br><br>
+               <button v-on:click="removeLesson(cart)">Remove</button>
+                </div>
+                <br>
+
+            
+                <div id="checkout-section">
+                    <h2>Checkout</h2>
+                    <p>
+                    <strong>Name:</strong>
+                    <input v-model.trim="checkout.Name" />
+                    </p>
+                    <p>
+                    <strong>Number:</strong>
+                     <input v-model.trim="checkout.PhoneNo" />
+                    </p>
+
+                    <h2>Order Information</h2>
+                    <p>Name: {{checkout.Name}}</p>
+                    <p>Number: {{checkout.PhoneNo}}</p>
+                    <button v-on:click="purchase" v-if="checkCheckout">Checkout</button>
+                    <p v-show="checkoutMsg" id="msg">    Thank You!!  </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="text/javascript">
+        var store = new Vue({
+            el: '#app',
+            data: { 
+                sitename: 'LESSONS 4 ALL',
+                lessons: {},
+                displayLessonsCart: [],
+                showLessonsPage: true,
+                btnCart: true,
+                sort: '',
+                checkout: {
+                    Name: '',
+                    PhoneNo: '',
+                },
+                checkoutMsg: false,
+                orders: [],
+            },
+            mounted() { 
+                                this.btnCart = false;   
+            },
+            methods: {
+                showCart() {
+                    this.displayLessonsCart = JSON.parse(localStorage.getItem("Cart"));
+                    this.showLessonsPage = this.showLessonsPage ? false : true; 
+                    localStorage.setItem("Lessons", JSON.stringify(this.lessons));
+                },
+                switchText() {  
+                    let btnText = document.getElementById("btnText");
+                    if (btnText.innerHTML === " Cart") {
+                        btnText.innerHTML = " Lessons";
+                    } else {
+                        btnText.innerHTML = " Cart";
+                    }
+                },
+                cartCount(lesson) {  
+                    let count = 0;
+                    
+                    for (let i = 0; i < this.displayLessonsCart.length; i++) {
+                        
+                        if (this.displayLessonsCart[i] === lesson) {
+                            count++;
+                        }
+                    }
+                    return count;                 },
+                counter(lesson) {
+                    let count = 5;
+                    
+                    for (let i = 0; i < this.displayLessonsCart.length; i++) {
+                        
+                        if (this.displayLessonsCart[i] === lesson) {
+                            count--;
+                        }
+                    }
+                    return count; 
+                },
+                addToCart(lesson, Space) {
+                    this.btnCart = true;   
+                    this.displayLessonsCart.push(lesson); 
+                    localStorage.setItem("Cart", JSON.stringify(this.displayLessonsCart)); 
+
+                   
+                    fetch('https://jeancw2.herokuapp.com/collection/lessons' + this.lessons[Space]._id, {
+                        method: 'PUT', 
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ "Space": this.counter(lesson) }), 
+                    })
+                        .then(response => response.json())
+                        .then(responseJSON => {
+                            console.log('Success:', responseJSON);
+                        });
+
+                },
+                canAddToCart(lesson) {
+                return lesson.Space > this.cartCount(lesson);
+                },
+                sortLessons() {
+                    switch (this.sort) {
+                        case 1:
+                            let sortedValues1 = this.lessons.sort((a, b) => {   
+                                if (a.SubjectName > b.SubjectName) {   
+                                    return 1;
+                                } else if (a.SubjectName < b.SubjectName) { 
+                                    return -1;
+                                } else {
+                                    return 0;  
+                                }
+                            })
+                            localStorage.setItem("Lessons", JSON.stringify(sortedValues1)); 
+                            return sortedValues1;
+                        case 2:
+                            let sortedValues2 = this.lessons.sort((a, b) => {    
+                                if (a.SubjectName > b.SubjectName) {
+                                    return -1;
+                                } else if (a.SubjectName < b.SubjectName) {
+                                    return 1;
+                                } else {
+                                    return 0;
+                                }
+                            })
+                            localStorage.setItem("Lessons", JSON.stringify(sortedValues2));
+                            return sortedValues2;
+                        case 3:
+                            let sortedValues3 = this.lessons.sort((a, b) => {
+                                if (a.Location > b.Location) {
+                                    return 1;
+                                } else if (a.Location < b.Location) {
+                                    return -1;
+                                } else {
+                                    return 0;
+                                }
+                            })
+                            localStorage.setItem("Lessons", JSON.stringify(sortedValues3));
+                            return sortedValues3;
+                        case 4:
+                            let sortedValues4 = this.lessons.sort((a, b) => {
+                                if (a.Location > b.Location) {
+                                    return -1;
+                                } else if (a.Location < b.Location) {
+                                    return 1;
+                                } else {
+                                    return 0;
+                                }
+                            })
+                            localStorage.setItem("Lessons", JSON.stringify(sortedValues4));
+                            return sortedValues4;
+                        case 5:
+                            let sortedValues5 = this.lessons.sort((a, b) => {
+                                if (a.Price > b.Price) {
+                                    return 1;
+                                } else if (a.Price < b.Price) {
+                                    return -1;
+                                } else {
+                                    return 0;
+                                }
+                            })
+                            localStorage.setItem("Lessons", JSON.stringify(sortedValues5));
+                            return sortedValues5;
+                        case 6:
+                            let sortedValues6 = this.lessons.sort((a, b) => {
+                                if (a.Price > b.Price) {
+                                    return -1;
+                                } else if (a.Price < b.Price) {
+                                    return 1;
+                                } else {
+                                    return 0;
+                                }
+                            })
+                            localStorage.setItem("Lessons", JSON.stringify(sortedValues6));
+                            return sortedValues6;
+                        case 7:
+                            let sortedValues7 = this.lessons.sort((a, b) => {
+                                if (a.Space > b.Space) {
+                                    return -1;
+                                } else if (a.Space < b.Space) {
+                                    return 1;
+                                } else {
+                                    return 0;
+                                }
+                            })
+                            localStorage.setItem("Lessons", JSON.stringify(sortedValues7));
+                                     return sortedValues7;
+                                             case 8:
+                            let sortedValues8 = this.lessons.sort((a, b) => {
+                                     if (a.Space > b.Space) {
+                                          return 1;
+                                       } else if (a.Space < b.Space) {
+                                          return -1;
+                                           } else {
+                                               return 0;
+                                                    }
+                            })
+                            localStorage.setItem("Lessons", JSON.stringify(sortedValues8));
+                            return sortedValues8;
+                    }
+                },
+                        removeLesson(cart) {
+                            const index = this.displayLessonsCart.indexOf(cart);    
+                            if (index !== -1) { 
+                                this.displayLessonsCart.splice(index, 1);  
+                            }
+                            localStorage.setItem("Cart", JSON.stringify(this.displayLessonsCart));  
+
+                            
+                                if (this.displayLessonsCart == 0) {
+                                    location.reload();
+                                    this.btnCart = false; 
+                                    this.showLessonsPage = this.showLessonsPage ? false : true; 
+                                }
+                            },
+                                purchase() {   
+                                    this.checkoutMsg = true;
+                                      let userOrders = JSON.parse(localStorage.getItem("Cart"));
+                                    
+                                        let userDetails = {
+                                            name: this.checkout.Name,
+                                            phonenumber: this.checkout.PhoneNo,
+                                            Order: userOrders,
+                                            };
+                                            this.orders.push(userDetails);
+
+                   
+                    fetch('https://jeancw2.herokuapp.com/collection/orders', {
+                        method: 'POST', 
+                        headers: {
+                            'Content-Type': 'application/json', 
+                        },
+                        body: JSON.stringify(this.orders), 
+                    })
+                        .then(response => response.json())
+                        .then(responseJSON => {
+                            console.log('Success:', responseJSON);
+                        });
+
+                    this.displayLessonsCart = [];   
+                    localStorage.setItem("Cart", JSON.stringify(this.displayLessonsCart));  
+
+                    for (let i = 0; i < 10; i++) {
+                        fetch('https://jeancw2.herokuapp.com/collection/products' + this.lessons[i]._id, {
+                            method: 'PUT', 
+                            headers: {
+                                'Content-Type': 'application/json', 
+                            },
+                            body: JSON.stringify({ "Space": 5 }), 
+                        })
+                            .then(response => response.json())
+                            .then(responseJSON => {
+                                console.log('Success:', responseJSON);
+                            });
+                    }                
+                },
+            },
+            computed: {
+                cartItemCount() {
+                    return this.displayLessonsCart.length; 
+                },
+                checkCheckout() { 
+                    if (!this.validateCheckout(this.checkout.Name, this.checkout.PhoneNo)) {
+                        return false;   
+                    } else {
+                        return true;   
+                    }
+                },
+            },
+            created: function () {
+                fetch('https://jeancw2.herokuapp.com/collection/products').then(
+                    function (response) {
+                        response.json().then(
+                            function (json) {
+                                // note that we used 'store.product' instead of 'this.product'
+                                myApp.products = json;
+                            });
+                    })
+            }
+        });
+
+    </script>
+</body>
+
+</html>
