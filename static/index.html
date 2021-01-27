@@ -114,7 +114,7 @@
                
                created: function() { // this function will be run automatically
                 // when creating the Vue instance
-                fetch('https://jeancw2.herokuapp.com/collection/products').then(
+                fetch('https://jeancw2.herokuapp.com/static/index.html').then(
                     function (response) {
                         response.json().then(
                                 function (json) {
@@ -125,6 +125,7 @@
 
                 })
 
+                
                 fetch('https://jeancw2.herokuapp.com/collection/orders'
                         , {
                             method: 'POST'
