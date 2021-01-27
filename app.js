@@ -15,10 +15,10 @@ const MongoClient = require('mongodb').MongoClient;
 let db; MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.xfu9d.mongodb.net/myapp?retryWrites=true&w=majority', (err, client) => {
    db = client.db('myapp')
     })
+    
 //main page
-    app.get('/static/index.html', function(req, res) {
-        res.sendFile(__dirname + '/index.html') 
-     });
+   app.get('/static/index.html', function (req, res) {res.send('')
+  })
     
 
 // get the collection name
