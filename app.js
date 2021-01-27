@@ -35,9 +35,6 @@ let db; MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.x
     app.get('/', function (req, res) {res.send('Select a collection, e.g., /collection/lessons')
     });
 
-//main page
-    app.get('/static/index.html', function (req, res) {res.send('main page')
-    });
 
 // retrieve all the objects from an collection
         app.get('/collection/:collectionName', (req, res) => {req.collection.find({}).toArray((e, results) => {
