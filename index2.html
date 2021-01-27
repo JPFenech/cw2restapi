@@ -53,7 +53,7 @@
                     </span>
 
                     <figure>
-                        <img v-bind:src="lesson.Image" height="100" width="100">
+                        <img v-bind:src="lesson.Image">
                     </figure>
 
                     <button v-on:click='addToCart(lesson, Space)' v-if='canAddToCart(lesson)'>Add to cart</button>
