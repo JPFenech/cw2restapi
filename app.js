@@ -17,6 +17,7 @@ let db; MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.x
    db = client.db('myapp')
     })
     
+
 // get the collection name
         app.param('collectionName', (req, res, next, collectionName) => {
             req.collection = db.collection(collectionName)
