@@ -5,6 +5,8 @@ const fetch = require("node-fetch")
 const fs = require('fs')
 const http = require('http')
 const path = require('path')
+var publicPath = path.resolve(__dirname, 'static')
+var imagePath = path.resolve(__dirname, 'images')
 
 // parse the request parameters
 app.use(express.json())
@@ -20,6 +22,10 @@ let db; MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.x
    app.get('/static/index.html', function (req, res) {res.send('')
   })
     
+//index and images path
+app.use('static/index.html', express.static(publicPath));
+app.use('static/images', express.static(imagePath));
+
 
 // get the collection name
         app.param('collectionName', (req, res, next, collectionName) => {
@@ -30,7 +36,6 @@ let db; MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.x
 
 // dispaly a message for root path to show that API is working
     app.get('/', function (req, res) {res.send('Select a collection, e.g., /collection/lessons')
-    //app.get('/static/index.html', function (req, res) {res.send('Select a collection, e.g., /collection/lessons')
     })
 
 // retrieve all the objects from an collection
@@ -89,7 +94,7 @@ app.use(function (req, res, next) {
   });
   
   app.use(function (req, res, next) {
-        var filePath = path.join(__dirname, "static/images", req.url);
+        var filePath = path.join(__dirname, "static/indexl.html", req.url);
     fs.stat(filePath, function (err, fileInfo) {
       if (err) {
         next();
@@ -99,6 +104,18 @@ app.use(function (req, res, next) {
       else next();
     });
   });
+
+  app.use(function (req, res, next) {
+    var filePath = path.join(__dirname, "static/images", req.url);
+fs.stat(filePath, function (err, fileInfo) {
+  if (err) {
+    next();
+    return;
+  }
+  if (fileInfo.isFile()) res.sendFile(filePath);
+  else next();
+});
+});
   
   app.use(function (req, res) {
     res.status(404);
