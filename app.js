@@ -105,17 +105,17 @@ app.use(function (req, res, next) {
     });
   });
 
-  app.use(function (req, res, next) {
-    var filePath = path.join(__dirname, "static/images", req.url);
-fs.stat(filePath, function (err, fileInfo) {
-  if (err) {
-    next();
-    return;
-  }
-  if (fileInfo.isFile()) res.sendFile(filePath);
-  else next();
-});
-});
+//   app.use(function (req, res, next) {
+//     var filePath = path.join(__dirname, "static/images", req.url);
+// fs.stat(filePath, function (err, fileInfo) {
+//   if (err) { 
+//     next();
+//     return;
+//   }
+//   if (fileInfo.isFile()) res.sendFile(filePath);
+//   else next();
+// });
+// });
   
   app.use(function (req, res) {
     res.status(404);
