@@ -46,10 +46,10 @@
                  </span>
                    
                     <span v-else-if="lesson.Space - cartCount(lesson) < 5">
-                        <h4>Available Spaces: {{lesson.Space - cartCount(lesson)}}</h4>
+                        <h4>Space Left: {{lesson.Space - cartCount(lesson)}}</h4>
                     </span>
                     <span v-else>
-                        <h4>Available Spaces: {{lesson.Space}}</h4>
+                        <h4>Spaces Left: {{lesson.Space}}</h4>
                     </span>
 
                     <figure>
