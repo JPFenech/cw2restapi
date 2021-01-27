@@ -37,7 +37,7 @@ app.use('static/images', express.static(imagePath));
     })
 
 //main page
-    app.get('/static/index.html', function (req, res) {res.send('test')
+    app.get('/static/index.html', function (req, res) {res.send('static/index.html')
     })
 
 // retrieve all the objects from an collection
