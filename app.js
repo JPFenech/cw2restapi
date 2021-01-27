@@ -1,5 +1,4 @@
 // load Express.js
-
 var fetch = require("node-fetch");
 var express = require("express");
 var app = express();
@@ -89,7 +88,7 @@ app.use(function (req, res, next) {
   });
   
   app.use(function (req, res, next) {
-        var filePath = path.join(__dirname, "static/indexl.html", req.url);
+        var filePath = path.join(__dirname, "indexl.html", req.url);
     fs.stat(filePath, function (err, fileInfo) {
       if (err) {
         next();
@@ -100,17 +99,6 @@ app.use(function (req, res, next) {
     });
   });
 
-//   app.use(function (req, res, next) {
-//     var filePath = path.join(__dirname, "static/images", req.url);
-// fs.stat(filePath, function (err, fileInfo) {
-//   if (err) { 
-//     next();
-//     return;
-//   }
-//   if (fileInfo.isFile()) res.sendFile(filePath);
-//   else next();
-// });
-// });
   
   app.use(function (req, res) {
     res.status(404);
