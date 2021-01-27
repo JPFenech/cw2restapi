@@ -18,9 +18,7 @@ let db; MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.x
    db = client.db('myapp')
     })
     
-//main page
-   app.get('/static/index.html', function (req, res) {res.send('')
-  })
+
     
 //index and images path
 app.use('static/index.html', express.static(publicPath));
@@ -36,6 +34,10 @@ app.use('static/images', express.static(imagePath));
 
 // dispaly a message for root path to show that API is working
     app.get('/', function (req, res) {res.send('Select a collection, e.g., /collection/lessons')
+    })
+
+//main page
+    app.get('/static/index.html', function (req, res) {res.send('test')
     })
 
 // retrieve all the objects from an collection
