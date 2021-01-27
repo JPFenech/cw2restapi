@@ -1,10 +1,13 @@
 // load Express.js
-const express = require('express')
-const app = express()
+const express = require('express');
+
 const fetch = require("node-fetch")
+
+const app = express()
 const fs = require('fs')
 const http = require('http')
 const path = require('path')
+
 var publicPath = path.resolve(__dirname, 'static')
 var imagePath = path.resolve(__dirname, 'images')
 
