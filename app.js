@@ -1,8 +1,6 @@
 // load Express.js
-const express = require('express');
-
-const fetch = require("node-fetch")
-
+const express = require('express')
+const fetch = require('node-fetch')
 const app = express()
 const fs = require('fs')
 const http = require('http')
