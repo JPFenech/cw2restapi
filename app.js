@@ -32,7 +32,7 @@ let db; MongoClient.connect('mongodb+srv://fenechjeanpierre:P@ssWORD1@cluster0.x
     });
 
 // dispaly a message for root path to show that API is working
-    app.get('/', function (req, res) {res.send('Select a collection, e.g., /collection/lessons')
+    app.get('/', function (req, res) {res.send('Select a collection, e.g., /collection/products')
     });
 
 
